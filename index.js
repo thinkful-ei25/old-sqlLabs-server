@@ -22,7 +22,9 @@ app.use(
 
 
 app.use(
-  cors()
+  cors({
+    origin: CLIENT_ORIGIN
+  })
 );
 
 passport.use(localStrategy);
