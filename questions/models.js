@@ -31,7 +31,7 @@ QuestionSchema.methods.serialize = function () {
     question: this.question || '',
     answer: this.answer || '',
     mValue: this.mValue || '',
-    
+
   };
 };
 
@@ -39,4 +39,4 @@ QuestionSchema.methods.serialize = function () {
 
 const Question = mongoose.model('User', QuestionSchema);
 
-module.exports = { User };
+module.exports = { Question };

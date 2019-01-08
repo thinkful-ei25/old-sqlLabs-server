@@ -22,19 +22,20 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  const stringFields = ['username', 'password', 'firstName', 'lastName'];
-  const nonStringField = stringFields.find(
-    field => field in req.body && typeof req.body[field] !== 'string'
-  );
+  //TODO MAKE SURE WE HAVE QUESTIONS VALIDATION
+  // const stringFields = ['username', 'password', 'firstName', 'lastName'];
+  // const nonStringField = stringFields.find(
+  //   field => field in req.body && typeof req.body[field] !== 'string'
+  // );
 
-  if (nonStringField) {
-    return res.status(422).json({
-      code: 422,
-      reason: 'ValidationError',
-      message: 'Incorrect field type: expected string',
-      location: nonStringField
-    });
-  }
+  // if (nonStringField) {
+  //   return res.status(422).json({
+  //     code: 422,
+  //     reason: 'ValidationError',
+  //     message: 'Incorrect field type: expected string',
+  //     location: nonStringField
+  //   });
+  // }
 
   // If the username and password aren't trimmed we give an error.  Users might
   // expect that these will work without trimming (i.e. they want the password
@@ -92,7 +93,7 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  let { username, password, firstName = '', lastName = '' } = req.body;
+  let { username, password, firstName = '', lastName = '', questions } = req.body;
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
   firstName = firstName.trim();
@@ -118,7 +119,8 @@ router.post('/', jsonParser, (req, res) => {
         username,
         password: hash,
         firstName,
-        lastName
+        lastName,
+        questions
       });
     })
     .then(user => {
