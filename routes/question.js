@@ -17,6 +17,7 @@ router.get('/', (req, res, next) => {
   User.findById(req.user.id)
     .populate('userQuestions')
     .then(user => {
+      console.log(user);
       //question that they are one
       const { questionText, id } = user.userQuestions[user.currentQuestionIndex];
       res.json({ userQuestion: { questionText, id } });
@@ -33,11 +34,11 @@ router.post('/', (req, res, next) => {
     throw err;
   }
 
-  // if(!userAnswer) {
-  //   const err = new Error('An `answer` is required');
-  //   err.code = 400;
-  //   throw err;
-  // }
+  if(!userAnswer) {
+    const err = new Error('An `answer` is required');
+    err.code = 400;
+    throw err;
+  }
 
   let currentUserQuestion;
   let correctAnswer;
