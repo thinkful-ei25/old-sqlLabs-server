@@ -10,15 +10,17 @@ const localAuth = passport.authenticate('local', {
   failWithError: true
 });
 
-const createAuthToken = function(user) {
+const createAuthToken = (user) => {
   return jwt.sign({ user }, config.JWT_SECRET, {
     subject: user.username,
     expiresIn: config.JWT_EXPIRY,
   });
 };
 
+
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
+  //Need to populate question list.
   res.json({ authToken });
 });
 

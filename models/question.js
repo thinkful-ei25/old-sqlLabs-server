@@ -9,12 +9,10 @@ const QuestionSchema = new mongoose.Schema({
   questionAnswer: {
     type: String,
     required: true
-  }
-},
-{
+  },
   toJSON: {
     virtuals: true,
-    transform(doc, result) {
+    transform(result) {
       delete result._id;
       delete result.__v;
       delete result.password;

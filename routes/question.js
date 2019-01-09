@@ -15,33 +15,28 @@ router.use(jwtAuth);
 
 router.get('/', (req, res, next) => {
   User.findById(req.user.id)
-    .populate('userQuestions')
+    // .populate('userQuestions')
     .then(user => {
-      console.log(user);
-      //question that they are one
-      const { questionText, id } = user.userQuestions[user.currentQuestionIndex];
-      res.json({ userQuestion: { questionText, id } });
+      console.log('User => ' + user.userQuestions[user.currentQuestionIndex].question);
+      console.log('User => ' + user.currentQuestionIndex);
     })
     .catch(next);
 });
 
 router.post('/', (req, res, next) => {
   const { userQuestion, userAnswer } = req.body;
-
-  if(!userQuestion || !userQuestion.id) {
-    const err = new Error('`userQuestion` or `userQuestion.id` required in request body');
+  const requiredInfo = ['userQuestion', 'userAnswer'];
+  const missingInfo = requiredInfo.find(field => !(field in req.body));
+  let err;
+  if(missingInfo) {
+    err = new Error(`${missingInfo} required in body`);
+    err.location = missingInfo;
     err.code = 400;
     throw err;
   }
 
-  if(!userAnswer) {
-    const err = new Error('An `answer` is required');
-    err.code = 400;
-    throw err;
-  }
+  let currentUserQuestion, correctAnswer;
 
-  let currentUserQuestion;
-  let correctAnswer;
 
   User.findById(req.user.id)
     .populate('userQuestions')
@@ -52,14 +47,16 @@ router.post('/', (req, res, next) => {
         err.code = 422;
         throw err;
       }
-      correctAnswer = userAnswer === currentUserQuestion.questionAnswer;
+      correctAnswer = userAnswer === currentUserQuestion.question.questionAnswer;
       
-      return user.updateQuestionIndex();
+      return user.postAnswer(correctAnswer);
     })
     .then(() => {
       res.json({
-        userQuestion: currentUserQuestion,
-        correct: correctAnswer
+        userQuestion: currentUserQuestion.question,
+        correct: correctAnswer,
+        numCorrect: currentUserQuestion.correct,
+        numIncorrect: currentUserQuestion.Incorrect
       });
     })
     .catch(next);

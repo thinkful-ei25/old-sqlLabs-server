@@ -15,19 +15,30 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    firstName: { type: String },
-    lastName: { type: String },
-    userQuestions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
-    currentQuestionIndex: { type: Number, default: 0 }
+    firstName: String,
+    lastName: String, 
+    userQuestions: [
+      { 
+        question: Question.schema,
+        mValue: Number, default: 0,
+        next: Number,
+        correct: {type: Number,  default: 0},
+        incorrect: {type: Number, default: 0}
+      }
+    ],
+    head: {
+      type: Number,
+      default: 0
+    }
   },
   {
     toJSON: {
       virtuals: true,
       transform(doc, result) {
         delete result._id;
-        delete result._v;
+        delete result.__v;
         delete result.password;
-        delete result.questions;
+        delete result.userQuestions;
       }
     }
   }
@@ -41,18 +52,19 @@ UserSchema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 };
 
-UserSchema.methods.generateQuestions = function userGenerateQuestions() {
-  return Question.find({}, 'id').then(results => {
-    const ids = results.map(item => item._id);
-    this.results = ids;
+UserSchema.methods.generateQuestions = function userGenerateQuestions() { 
+  return Question.find().then((results) => {
+    this.userQuestions = results.map(question => ({ question}));
     return this.save();
   });
 };
 
-UserSchema.methods.updateQuestionIndex = function userUpdateQuestionIndex() {
-  const { currentQuestionIndex } = this;
-  this.currentQuestionIndex =
-    (currentQuestionIndex + 1) % this.userQuestions.length;
+UserSchema.methods.postAnswer = function userPostAnswer(correct) {
+  const currentUserQuestion = this.userQuestions[this.currentQuestionIndex];
+  if(correct) currentUserQuestion.correct ++;
+  if (!correct) currentUserQuestion.incorrect++;
+
+  this.currentQuestionIndex += 1;
   return this.save();
 };
 

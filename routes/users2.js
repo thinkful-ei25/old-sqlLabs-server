@@ -1,6 +1,6 @@
-'use strict';
+use strict';
 const express = require('express');
-const User = require('../models/user');
+const User  = require('../models/user');
 
 const router = express.Router();
 
@@ -61,7 +61,7 @@ function validateUser(req, res, next) {
     err.code = 422;
   }
 
-  if (err) {
+  if(err) {
     err.reason = 'ValidationError';
     next(err);
     return;
@@ -71,16 +71,8 @@ function validateUser(req, res, next) {
 }
 
 // Post to register a new user
-router.post('/', (req, res, next) => {
-
-  console.log('hello 1');
-  let {
-    username,
-    password,
-    firstName = '',
-    lastName = '',
-    userQuestions
-  } = req.body;
+router.post('/', validateUser, (req, res) => {
+  let { username, password, firstName = '', lastName = '', userQuestions } = req.body;
   firstName = firstName.trim();
   lastName = lastName.trim();
 
@@ -95,12 +87,10 @@ router.post('/', (req, res, next) => {
           location: 'username'
         });
       }
-      console.log('hello');
       return User.hashPassword(password);
     })
     .then(hash => {
-      console.log('hello => ' + hash);
-      return new User({
+      return User.create({
         username,
         password: hash,
         firstName,
@@ -109,16 +99,9 @@ router.post('/', (req, res, next) => {
       });
     })
     .then(user => {
-      console.log(user);
-      return res
-        .status(201)
-        .location(`${req.baseUrl}/${user._id}`)
-        .json(user);
+      return res.status(201).location(`${req.baseUrl}/${user._id}`).json(user);
     })
     .catch(err => {
-      if(err.reason === 'MongoError') {
-        return res.status(err.code).json(err);
-      }
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
@@ -126,4 +109,4 @@ router.post('/', (req, res, next) => {
     });
 });
 
-module.exports = router;
+module.exports = router ;
