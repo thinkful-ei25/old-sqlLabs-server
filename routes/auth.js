@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
 
+
+
 const localAuth = passport.authenticate('local', {
   session: false,
   failWithError: true
@@ -18,9 +20,10 @@ const createAuthToken = (user) => {
 };
 
 
+
 router.post('/login', localAuth, (req, res) => {
   const authToken = createAuthToken(req.user);
-  //Need to populate question list.
+
   res.json({ authToken });
 });
 

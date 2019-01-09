@@ -71,9 +71,9 @@ function validateUser(req, res, next) {
 }
 
 // Post to register a new user
-router.post('/', (req, res, next) => {
+router.post('/', validateUser, (req, res, next) => {
 
-  console.log('hello 1');
+
   let {
     username,
     password,
@@ -95,21 +95,18 @@ router.post('/', (req, res, next) => {
           location: 'username'
         });
       }
-      console.log('hello');
       return User.hashPassword(password);
     })
     .then(hash => {
-      console.log('hello => ' + hash);
-      return new User({
+      return  User.create({
         username,
         password: hash,
         firstName,
         lastName,
         userQuestions
       });
-    })
+    }).then(user => user.generateQuestions())
     .then(user => {
-      console.log(user);
       return res
         .status(201)
         .location(`${req.baseUrl}/${user._id}`)

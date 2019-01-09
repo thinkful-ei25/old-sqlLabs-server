@@ -10,6 +10,7 @@ const QuestionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+},{
   toJSON: {
     virtuals: true,
     transform(result) {
@@ -18,7 +19,8 @@ const QuestionSchema = new mongoose.Schema({
       delete result.password;
     },
   },
-});
+}
+);
 
 
 
