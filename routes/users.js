@@ -99,6 +99,9 @@ router.post('/', validateUser, (req, res) => {
       });
     })
     .then(user => {
+      return user.generateQuestions();
+    })
+    .then(user => {
       return res.status(201).location(`${req.baseUrl}/${user._id}`).json(user);
     })
     .catch(err => {

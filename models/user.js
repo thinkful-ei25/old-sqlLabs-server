@@ -42,7 +42,7 @@ UserSchema.statics.hashPassword = function(password) {
 };
 
 UserSchema.methods.generateQuestions = function userGenerateQuestions() {
-  return Question.find({}, 'id').then(results => {
+  return Question.find().then(results => {
     const ids = results.map(item => item._id);
     this.results = ids;
     return this.save();
