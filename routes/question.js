@@ -13,21 +13,26 @@ const jwtAuth = passport.authenticate('jwt', {
 });
 router.use(jwtAuth);
 
+
+//create a query to reused the findById
 router.get('/', (req, res, next) => {
   User.findById(req.user.id)
     .then(user => {
-      const questionText = user.userQuestions[user.head].question.questionText;
-      const questionId = user.userQuestions[user.head].question.id;
+      const currentUser = user.userQuestions[user.head];
+      const questionText = currentUser.question.questionText;
+      const questionId = currentUser.question.id;
+      // const questionText = user.userQuestions[user.head].question.questionText;
+      // const questionId = user.userQuestions[user.head].question.id;
       res.json({ question: { questionText, questionId } });
     })
     .catch(next);
 });
 
 router.post('/', (req, res, next) => {
-  const { userQuestion, userAnswer, questionId } = req.body;
-  const requiredInfo = ['userQuestion', 'userAnswer'];
+  const { userAnswer, questionId } = req.body;
+  const requiredInfo = ['questionId', 'userAnswer'];
   const missingInfo = requiredInfo.find(field => !(field in req.body));
-
+  let currentUserQuestion, correctAnswer;
   let err;
   if (missingInfo) {
     err = new Error(`${missingInfo} required in body`);
@@ -36,9 +41,7 @@ router.post('/', (req, res, next) => {
     throw err;
   }
 
-  //currentUserQuestion is the question the user is answering.
-  //correct answer is the answer to the currentUserQuestion
-  let currentUserQuestion, correctAnswer;
+
 
   User.findById(req.user.id)
     .then(user => {
@@ -66,7 +69,3 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 module.exports = router;
-
-
-
-

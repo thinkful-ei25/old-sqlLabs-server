@@ -10,6 +10,7 @@ const QuestionSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  category: String
 },{
   toJSON: {
     virtuals: true,

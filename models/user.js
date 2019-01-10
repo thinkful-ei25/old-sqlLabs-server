@@ -63,14 +63,13 @@ UserSchema.methods.generateQuestions = function userGenerateQuestions() {
 };
 
 UserSchema.methods.postAnswer = function userPostAnswer(correct) {
-  console.log(correct);
+  let mValueChange;
   const currentUserQuestion = this.userQuestions[this.head];
   if (correct) currentUserQuestion.correct++;
   if (!correct) currentUserQuestion.incorrect++;
+  
+  mValueChange = currentUserQuestion.mValue > 2 ? -1 : 1;
 
-  // let increment = 2;
-
-  // if(currentUserQuestion.mValue ==)
 
   correct
     ? (currentUserQuestion.mValue += 2)
@@ -88,17 +87,17 @@ UserSchema.methods.handleUserQuestion = function userhandleUserQuestion(value) {
   this.head = this.userQuestions[hold].next;
 
   let rotate = hold;
-  //rotate = 0;
+
   for (let i = 0; i < value && i < this.userQuestions.length-1; i++) {
     rotate = this.userQuestions[rotate].next;
     console.log('rotate ' + rotate);
   }
 
-  // rotate = 1;
-  // hold = 0;
 
   this.userQuestions[hold].next = this.userQuestions[rotate].next;
   this.userQuestions[rotate].next = hold;
+
+
 };
 
 module.exports = mongoose.model('User', UserSchema);
