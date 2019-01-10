@@ -14,21 +14,20 @@ const jwtAuth = passport.authenticate('jwt', {
 router.use(jwtAuth);
 
 router.get('/', (req, res, next) => {
-  console.log(req.user.id);
   User.findById(req.user.id)
     .then(user => {
       const questionText = user.userQuestions[user.head].question.questionText;
       const questionId = user.userQuestions[user.head].question.id;
-      console.log('questionText => ' + questionText);
       res.json({ question: { questionText, questionId } });
     })
     .catch(next);
 });
 
 router.post('/', (req, res, next) => {
-  const { userQuestion, userAnswer } = req.body;
+  const { userQuestion, userAnswer, questionId } = req.body;
   const requiredInfo = ['userQuestion', 'userAnswer'];
   const missingInfo = requiredInfo.find(field => !(field in req.body));
+
   let err;
   if (missingInfo) {
     err = new Error(`${missingInfo} required in body`);
@@ -43,9 +42,8 @@ router.post('/', (req, res, next) => {
 
   User.findById(req.user.id)
     .then(user => {
-      currentUserQuestion = user.userQuestions[0];
-      console.log(currentUserQuestion);
-      if (userQuestion.id !== currentUserQuestion.id) {
+      currentUserQuestion = user.userQuestions[user.head];
+      if (questionId !== currentUserQuestion.question.id) {
         const err = new Error('Question ids do not match');
         err.code = 422;
         throw err;
@@ -57,12 +55,18 @@ router.post('/', (req, res, next) => {
     })
     .then(() => {
       res.json({
-        userQuestion: currentUserQuestion.question,
+        questionId: currentUserQuestion.question.id,
+        questionText: currentUserQuestion.question.questionText,
+        questionAnswer: currentUserQuestion.question.questionAnswer,
         correct: correctAnswer,
         numCorrect: currentUserQuestion.correct,
-        numIncorrect: currentUserQuestion.Incorrect
+        numIncorrect: currentUserQuestion.incorrect
       });
     })
     .catch(next);
 });
 module.exports = router;
+
+
+
+

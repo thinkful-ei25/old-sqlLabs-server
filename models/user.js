@@ -15,8 +15,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    firstName: String,
-    lastName: String,
+    firstName: {type: String, default: ''},
+    lastName: { type: String, default: '' },
     userQuestions: [
       {
         question: Question.schema,
@@ -54,47 +54,51 @@ UserSchema.statics.hashPassword = function(password) {
 
 UserSchema.methods.generateQuestions = function userGenerateQuestions() {
   return Question.find().then(results => {
-    this.userQuestions = results.map((question, i) => ({ question, next: i < results.length -1 ? i += 1 : null }));
+    this.userQuestions = results.map((question, i) => ({
+      question,
+      next: i < results.length - 1 ? (i += 1) : null
+    }));
     return this.save();
   });
 };
 
 UserSchema.methods.postAnswer = function userPostAnswer(correct) {
-  const currentUserQuestion = this.userQuestions[this.currentQuestionIndex];
+  console.log(correct);
+  const currentUserQuestion = this.userQuestions[this.head];
   if (correct) currentUserQuestion.correct++;
-  if (!correct) currentUserQuestion.incorrect++;  
+  if (!correct) currentUserQuestion.incorrect++;
 
   // let increment = 2;
 
   // if(currentUserQuestion.mValue ==)
 
-  correct ? currentUserQuestion.mValue += 2 : currentUserQuestion.mValue = 1;
+  correct
+    ? (currentUserQuestion.mValue += 2)
+    : (currentUserQuestion.mValue = 1);
 
   this.handleUserQuestion(currentUserQuestion.mValue);
 
   return this.save();
 };
 
-
 UserSchema.methods.handleUserQuestion = function userhandleUserQuestion(value) {
   //set head value to be equal to current question.
-  let hold = this.head;  
+  let hold = this.head;
   //set the head to be the current question's next
   this.head = this.userQuestions[hold].next;
 
   let rotate = hold;
   //rotate = 0;
-  for(let i = 0; i < value; i++){
+  for (let i = 0; i < value && i < this.userQuestions.length-1; i++) {
     rotate = this.userQuestions[rotate].next;
+    console.log('rotate ' + rotate);
   }
 
   // rotate = 1;
   // hold = 0;
 
-
   this.userQuestions[hold].next = this.userQuestions[rotate].next;
   this.userQuestions[rotate].next = hold;
-
 };
 
 module.exports = mongoose.model('User', UserSchema);
