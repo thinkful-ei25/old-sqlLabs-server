@@ -6,7 +6,7 @@ module.exports = {
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
   DATABASE_URL:
     process.env.DATABASE_URL ||
-    'mongodb://admin:credit6000living300house@ds145093.mlab.com:45093/sql-labs',
+        'mongodb://localhost/sql-learning-labs',
   TEST_DATABASE_URL:
         process.env.TEST_DATABASE_URL ||
         'mongodb://localhost/sql-learning-labs-test',
