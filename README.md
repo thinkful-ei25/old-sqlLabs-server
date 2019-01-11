@@ -1,45 +1,82 @@
-# Thinkful Backend Template
+## ⚗️SQL Learning Labs
+**DEMO LOGIN CREDENTIALS:** <br/>
+user: **demo**<br/>
+pass: **demo123456**<br/>
 
-A template for developing and deploying Node.js apps.
+Welcome to SQL Learning Labs<br/><br/>
 
-## Getting started
+Our Goal here is to help students of all levels master & improve their skills in SQL. 
+Future Plans of Updates:
+- Intermediate & Master Levels
+- Tutorial Bash Commands
 
-### Setting up a project
+### **`Contents`**
+- [Tech Stack](#tech-stack)
+- [Links](#links)
+- [Navigating Repos](#navigating-repos)
+- [Concept Wireframing](#concept)
+- [Screenshots](#screenshots)
 
-* Move into your projects directory: `cd ~/YOUR_PROJECTS_DIRECTORY`
-* Clone this repository: `git clone https://github.com/Thinkful-Ed/backend-template YOUR_PROJECT_NAME`
-* Move into the project directory: `cd YOUR_PROJECT_NAME`
-* Install the dependencies: `npm install`
-* Create a new repo on GitHub: https://github.com/new
-    * Make sure the "Initialize this repository with a README" option is left unchecked
-* Update the remote to point to your GitHub repository: `git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME`
+### **`Tech Stack`**
+#### Front End with *React.js* and *Redux*
 
-### Working on the project
 
-* Move into the project directory: `cd ~/YOUR_PROJECTS_DIRECTORY/YOUR_PROJECT_NAME`
-* Run the development task: `npm start`
-    * Starts a server running at http://localhost:8080
-    * Automatically restarts when any of your files change
+**React.js**  - renders real-time content change resulting from user actions<br/>
+**Redux** - state management & token handling<br/>
+**React-Router-Dom** - for declarative routing.  <br/>
 
-## Databases
+ 
 
-By default, the template is configured to connect to a MongoDB database using Mongoose.  It can be changed to connect to a PostgreSQL database using Knex by replacing any imports of `db-mongoose.js` with imports of `db-knex.js`, and uncommenting the Postgres `DATABASE_URL` lines in `config.js`.
+#### Back End with *Express.js*, *Node.js*, *Mongoose*/*MongoDB*
 
-## Deployment
+**Express.js** - Routing/middleware <br/>
+ - passport.js<br/>
+ - JWT Token<br/>
+ - bcrypt<br/>
 
-Requires the [Heroku CLI client](https://devcenter.heroku.com/articles/heroku-command-line).
+**Node.js** - Javascript runtime environment<br/>
+**Mongoose/MongoDB** - Data is being stored in a MongoDB environment after being cleaned and prepped via Mongoose schemas/virtuals/models.<br/>
 
-### Setting up the project on Heroku
+### **`LINKS`** 
+[Client-Side](https://sql-labs.herokuapp.com/)<br/>
+[Server-Side](https://xlingual-server.herokuapp.com/)<br/>
 
-* Move into the project directory: `cd ~/YOUR_PROJECTS_DIRECTORY/YOUR_PROJECT_NAME`
-* Create the Heroku app: `heroku create PROJECT_NAME`
+**Github Repos:** <br/>
 
-* If your backend connects to a database, you need to configure the database URL:
-    * For a MongoDB database: `heroku config:set DATABASE_URL=mongodb://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
-    * For a PostgreSQL database: `heroku config:set DATABASE_URL=postgresql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME`
+front-end: https://github.com/thinkful-ei25/SQL-Labs-Mary-Brady-client<br/>
 
-* If you are creating a full-stack app, you need to configure the client origin: `heroku config:set CLIENT_ORIGIN=https://www.YOUR_DEPLOYED_CLIENT.com`
+back-end: https://github.com/thinkful-ei25/sql-labs-mary-brady-server<br/>
 
-### Deploying to Heroku
+### **`Navigating Repos`**<br/>
+**Front-end example routes** <br/>
+Root-component: src/components/app.js<br/>
+Landing-Page: src/components/landing-page.js<br/>
+user actions: src/actions/users.js<br/>
+front of card actions: src/actions/frontofcardactions.js<br/>
+back of card actions: src/actions/backofcardactions.js<br/>
 
-* Push your code to Heroku: `git push heroku master`
+
+**Back-end example routes** <br/>
+
+*Server-Root*<br/>
+/index.js<br/>
+
+*Models*<br/>
+Question Model: models/question.js<br/>
+User Model: models/user.js<br/>
+
+*Routes*<br/>
+All Authorization passes through: routes/auth.js<br/>
+Post to create/salt a 'User': /routes/users.js<br/>
+All Flashcard related routes: /routes/question.js<br/>
+- Retrieval of User's private flashcard questions:  '/frontofcard'<br/>
+- Retrieval of User's answers from corresponding flashcard questions: '/backofcard'<br/>
+
+
+### **`Concept Wireframing`**
+
+LINK: [original-wireframe concept]()
+
+### **`Screenshots`**
+
+COMING SOON
