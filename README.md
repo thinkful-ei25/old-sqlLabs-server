@@ -39,7 +39,7 @@ Future Plans of Updates:
 
 ### **`LINKS`** 
 [Client-Side](https://sql-labs.herokuapp.com/)<br/>
-[Server-Side](https://xlingual-server.herokuapp.com/)<br/>
+[Server-Side](https://sql-labs-server.herokuapp.com/)<br/>
 
 **Github Repos:** <br/>
 
